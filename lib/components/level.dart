@@ -38,7 +38,7 @@ class Level extends World {
     final collisionsLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
 
     if (collisionsLayer != null) {
-      for (final collision in collisionsLayer!.objects) {
+      for (final collision in collisionsLayer.objects) {
         switch (collision.class_) {
           case 'Platform':
             final platform = CollisionBlock(
