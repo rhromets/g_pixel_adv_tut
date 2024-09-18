@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flutter/services.dart';
 import 'package:g_pixel_adventure_tutorial/pixel_adventure.dart';
 
 enum PlayerState {
@@ -15,17 +16,17 @@ enum PlayerDirection {
 }
 
 class Player extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure> {
+    with HasGameRef<PixelAdventure>, KeyboardHandler {
   String character;
 
   Player({
     position,
-    required this.character,
+    this.character = 'Ninja Frog',
   }) : super(position: position);
 
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
-  final double stepTime = 0.05;
+  final double stepTime = 0.07;
 
   PlayerDirection playerDirection = PlayerDirection.none;
   double moveSpeed = 100;
@@ -42,6 +43,27 @@ class Player extends SpriteAnimationGroupComponent
   void update(double dt) {
     _updatePlayerMovement(dt);
     super.update(dt);
+  }
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    var isLeftKeyPressed = (keysPressed.contains(LogicalKeyboardKey.keyA) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft));
+
+    var isRightKeyPressed = (keysPressed.contains(LogicalKeyboardKey.keyD) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowRight));
+
+    if (isLeftKeyPressed && isRightKeyPressed) {
+      playerDirection = PlayerDirection.none;
+    } else if (isLeftKeyPressed) {
+      playerDirection = PlayerDirection.left;
+    } else if (isRightKeyPressed) {
+      playerDirection = PlayerDirection.right;
+    } else {
+      playerDirection = PlayerDirection.none;
+    }
+
+    return super.onKeyEvent(event, keysPressed);
   }
 
   void _loadAllAnimations() {
