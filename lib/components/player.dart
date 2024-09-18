@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:g_pixel_adventure_tutorial/components/collision_bloc.dart';
+import 'package:g_pixel_adventure_tutorial/components/utils.dart';
 import 'package:g_pixel_adventure_tutorial/pixel_adventure.dart';
 
 enum PlayerState {
@@ -39,6 +40,7 @@ class Player extends SpriteAnimationGroupComponent
   void update(double dt) {
     _updatePlayerState();
     _updatePlayerMovement(dt);
+    _checkHorizontalCollisions();
     super.update(dt);
   }
 
@@ -106,4 +108,22 @@ class Player extends SpriteAnimationGroupComponent
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
+
+  void _checkHorizontalCollisions() {
+    for (final block in collisionBlocks) {
+      if (!block.isPlatform) {
+        if (checkCollision(this, block)) {
+          if (velocity.x > 0) {
+            velocity.x = 0;
+            position.x = block.x - width;
+          }
+          if (velocity.x < 0) {
+            velocity.x = 0;
+            position.x = block.x + block.width + width;
+          }
+        }
+      }
+    }
+  }
+  
 }
