@@ -9,6 +9,8 @@ import 'package:g_pixel_adventure_tutorial/pixel_adventure.dart';
 enum PlayerState {
   idle,
   running,
+  jumping,
+  falling,
 }
 
 class Player extends SpriteAnimationGroupComponent
@@ -22,6 +24,8 @@ class Player extends SpriteAnimationGroupComponent
 
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
+  late final SpriteAnimation jumpingAnimation;
+  late final SpriteAnimation fallingAnimation;
   final double stepTime = 0.07;
 
   final double _gravity = 9.8;
@@ -73,11 +77,15 @@ class Player extends SpriteAnimationGroupComponent
   void _loadAllAnimations() {
     idleAnimation = _spriteAnimation('Idle', 11);
     runningAnimation = _spriteAnimation('Run', 12);
+    jumpingAnimation = _spriteAnimation('Jump', 1);
+    fallingAnimation = _spriteAnimation('Fall', 1);
 
     // List of all animations
     animations = {
       PlayerState.idle: idleAnimation,
       PlayerState.running: runningAnimation,
+      PlayerState.jumping: jumpingAnimation,
+      PlayerState.falling: fallingAnimation,
     };
 
     // Set current animation
@@ -105,11 +113,14 @@ class Player extends SpriteAnimationGroupComponent
     }
 
     // Check if moving, set running
-    if (horizontalMovement != 0) {
-      playerState = PlayerState.running;
-    } else {
-      playerState = PlayerState.idle;
-    }
+    if (horizontalMovement != 0) playerState = PlayerState.running;
+
+    // Check if falling, set to falling
+    if (velocity.y > 0) playerState = PlayerState.falling;
+
+    // Check if jumping, set to jumping
+    if (velocity.y < 0) playerState = PlayerState.jumping;
+
 
     current = playerState;
   }
