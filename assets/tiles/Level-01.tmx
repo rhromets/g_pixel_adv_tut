@@ -2,6 +2,9 @@
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="20">
  <tileset firstgid="1" source="PixelAdventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
+  <properties>
+   <property name="BackgroundColor" value="Gray"/>
+  </properties>
   <data encoding="csv">
 24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,
 24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,112,24,24,24,
