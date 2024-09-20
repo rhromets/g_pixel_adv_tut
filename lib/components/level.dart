@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:g_pixel_adventure_tutorial/components/collision_bloc.dart';
+import 'package:g_pixel_adventure_tutorial/components/collision_block.dart';
 import 'package:g_pixel_adventure_tutorial/components/player.dart';
 
 class Level extends World {
