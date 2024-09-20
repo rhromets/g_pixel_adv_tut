@@ -17,6 +17,7 @@ class Fruit extends SpriteAnimationComponent
           size: size,
         );
 
+  bool _collected = false;
   final double stepTime = 0.05;
   final hitbox = CustomHitbox(
     offsetX: 10,
@@ -49,6 +50,21 @@ class Fruit extends SpriteAnimationComponent
   }
 
   void collidedWithPlayer() {
-    removeFromParent();
+    if (!_collected) {
+      animation = SpriteAnimation.fromFrameData(
+        game.images.fromCache('Items/Fruits/Collected.png'),
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: stepTime,
+          textureSize: Vector2.all(32),
+          loop: false,
+        ),
+      );
+      _collected = true;
+    }
+    Future.delayed(
+      const Duration(milliseconds: 400),
+      () => removeFromParent(),
+    );
   }
 }
