@@ -105,9 +105,11 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Fruit) other.collidedWithPlayer();
-    if (other is Saw) _respawn();
-    if (other is Checkpoint && !reachedCheckpoint) _reachedCheckpoint();
+    if (!reachedCheckpoint) {
+      if (other is Fruit) other.collidedWithPlayer();
+      if (other is Saw) _respawn();
+      if (other is Checkpoint) _reachedCheckpoint();
+    }
 
     super.onCollision(intersectionPoints, other);
   }
@@ -283,5 +285,16 @@ class Player extends SpriteAnimationGroupComponent
     }
 
     current = PlayerState.desappearing;
+
+    const reachedCheckpointsDuration = Duration(milliseconds: 350);
+    Future.delayed(reachedCheckpointsDuration, () {
+      reachedCheckpoint = false;
+      position = Vector2.all(-640);
+
+      const waitToChangeNextLevel = Duration(seconds: 3);
+      Future.delayed(waitToChangeNextLevel, () {
+        game.loadNextLevel();
+      });
+    });
   }
 }

@@ -12,11 +12,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 2,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.75,
-                "y": 183.75
+                "x": 335,
+                "y": 273
             }
         },
         "Level-02.tmx": {
