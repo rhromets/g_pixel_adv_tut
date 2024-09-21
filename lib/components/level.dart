@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:g_pixel_adventure_tutorial/components/background_tile.dart';
+import 'package:g_pixel_adventure_tutorial/components/checkpoint.dart';
 import 'package:g_pixel_adventure_tutorial/components/collision_block.dart';
 import 'package:g_pixel_adventure_tutorial/components/fruit.dart';
 import 'package:g_pixel_adventure_tutorial/components/player.dart';
@@ -66,6 +67,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
             player.position = Vector2(spawnPoint.x, spawnPoint.y);
             add(player);
             break;
+
           case 'Fruit':
             final fruit = Fruit(
               fruit: spawnPoint.name,
@@ -74,11 +76,11 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             add(fruit);
             break;
+
           case 'Saw':
             final isVertical = spawnPoint.properties.getValue('isVertical');
             final offNeg = spawnPoint.properties.getValue('offNeg');
             final offPos = spawnPoint.properties.getValue('offPos');
-
             final saw = Saw(
               isVertical: isVertical,
               offNeg: offNeg,
@@ -88,6 +90,15 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             add(saw);
             break;
+
+          case 'Checkpoint':
+            final checkpoint = Checkpoint(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(checkpoint);
+            break;
+
           default:
         }
       }
