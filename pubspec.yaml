@@ -31,6 +31,7 @@ flutter:
     - assets/images/Background/
     - assets/images/Terrain/
     - assets/images/HUD/
+    - assets/images/Traps/Saw/
     - assets/images/Items/Fruits/
     - assets/images/Main Characters/Ninja Frog/
     - assets/images/Main Characters/Mask Dude/
