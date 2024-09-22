@@ -5,19 +5,23 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
+import 'package:g_pixel_adventure_tutorial/components/jump_button.dart';
 import 'package:g_pixel_adventure_tutorial/components/player.dart';
 import 'package:g_pixel_adventure_tutorial/components/level.dart';
 
 class PixelAdventure extends FlameGame
-    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection {
+    with
+        HasKeyboardHandlerComponents,
+        DragCallbacks,
+        HasCollisionDetection,
+        TapCallbacks {
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
   Player player = Player(character: 'Mask Dude');
   late JoystickComponent joystick;
-  late HudButtonComponent jumpBtn;
-  bool showJoystick = true;
-  List<String> levelNames = ['Level-01', 'Level-02'];
+  bool showControls = true;
+  List<String> levelNames = ['Level-01', 'Level-01'];
   int currentLevelIndex = 0;
 
   @override
@@ -27,9 +31,9 @@ class PixelAdventure extends FlameGame
 
     _loadLevel();
 
-    if (showJoystick) {
+    if (showControls) {
       addJoystick();
-      addJumpBtn();
+      add(JumpButton());
     }
 
     return super.onLoad();
@@ -37,7 +41,7 @@ class PixelAdventure extends FlameGame
 
   @override
   void update(double dt) {
-    if (showJoystick) {
+    if (showControls) {
       updateJoystick();
     }
     super.update(dt);
@@ -62,27 +66,6 @@ class PixelAdventure extends FlameGame
     );
 
     add(joystick);
-  }
-
-  void addJumpBtn() {
-    jumpBtn = HudButtonComponent(
-      anchor: Anchor.bottomRight,
-      priority: 100,
-      margin: const EdgeInsets.only(right: 40, bottom: 40),
-      button: SpriteComponent(
-        sprite: Sprite(
-          images.fromCache('HUD/Knob.png'),
-        ),
-        size: Vector2(64, 64),
-      ),
-      onPressed: () {
-        if (player.isOnGround) {
-          player.performJump();
-        }
-      },
-    );
-
-    add(jumpBtn);
   }
 
   void updateJoystick() {
