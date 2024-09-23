@@ -104,7 +104,7 @@ class PixelAdventure extends FlameGame
 
       cam = CameraComponent.withFixedResolution(
         world: world,
-        width: 640,
+        width: 638,
         height: 360,
       );
       cam.viewfinder.anchor = Anchor.topLeft;
