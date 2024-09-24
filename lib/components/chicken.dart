@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:g_pixel_adventure_tutorial/components/player.dart';
@@ -45,6 +46,7 @@ class Chicken extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
+    _updateState();
     _movement(dt);
     super.update(dt);
   }
@@ -92,6 +94,9 @@ class Chicken extends SpriteAnimationGroupComponent
           (player.x + playerOffset < position.x + chickenOffset) ? -1 : 1;
       velocity.x = targetDirection * runSpeed;
     }
+
+    moveDirection = lerpDouble(moveDirection, targetDirection, 0.1) ?? 1;
+
     position.x += velocity.x * dt;
   }
 
@@ -102,5 +107,14 @@ class Chicken extends SpriteAnimationGroupComponent
         player.x + playerOffset <= rangePos &&
         player.y + player.height > position.y &&
         player.y < position.y + height;
+  }
+
+  void _updateState() {
+    current = (velocity.x != 0) ? State.run : State.idle;
+
+    if ((moveDirection > 0 && scale.x > 0) ||
+        (moveDirection < 0 && scale.x < 0)) {
+      flipHorizontallyAroundCenter();
+    }
   }
 }
