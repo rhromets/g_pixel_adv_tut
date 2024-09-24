@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:g_pixel_adventure_tutorial/components/player.dart';
 import 'package:g_pixel_adventure_tutorial/pixel_adventure.dart';
 
 enum State { idle, run, hit }
 
 class Chicken extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure> {
+    with HasGameRef<PixelAdventure>, CollisionCallbacks {
   final double offNeg;
   final double offPos;
 
@@ -22,6 +24,7 @@ class Chicken extends SpriteAnimationGroupComponent
   static const stepTime = 0.05;
   static const tileSize = 16;
   static const runSpeed = 80;
+  static const _bounceHeight = 260.0;
   final textureSize = Vector2(32, 34);
 
   Vector2 velocity = Vector2.zero();
@@ -29,6 +32,7 @@ class Chicken extends SpriteAnimationGroupComponent
   double rangePos = 0;
   double moveDirection = 1;
   double targetDirection = -1;
+  bool gotStomped = false;
 
   late final Player player;
   late final SpriteAnimation _idleAnimation;
@@ -37,8 +41,15 @@ class Chicken extends SpriteAnimationGroupComponent
 
   @override
   FutureOr<void> onLoad() {
-    debugMode = true;
+    // debugMode = true;
     player = game.player;
+
+    add(
+      RectangleHitbox(
+        position: Vector2(4, 6),
+        size: Vector2(24, 26),
+      ),
+    );
     _loadAllAnimations();
     _calculateRange();
     return super.onLoad();
@@ -46,8 +57,10 @@ class Chicken extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
-    _updateState();
-    _movement(dt);
+    if (!gotStomped) {
+      _updateState();
+      _movement(dt);
+    }
     super.update(dt);
   }
 
@@ -115,6 +128,21 @@ class Chicken extends SpriteAnimationGroupComponent
     if ((moveDirection > 0 && scale.x > 0) ||
         (moveDirection < 0 && scale.x < 0)) {
       flipHorizontallyAroundCenter();
+    }
+  }
+
+  void collidedWithPlayer() async {
+    if (player.velocity.y > 0 && player.y + player.height > position.y) {
+      if (game.playSounds) {
+        FlameAudio.play('hit.wav', volume: game.soundVolume);
+      }
+      gotStomped = true;
+      current = State.hit;
+      player.velocity.y = -_bounceHeight;
+      await animationTicker?.completed;
+      removeFromParent();
+    } else {
+      player.collidedWithEnemy();
     }
   }
 }
