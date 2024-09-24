@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:g_pixel_adventure_tutorial/components/background_tile.dart';
 import 'package:g_pixel_adventure_tutorial/components/checkpoint.dart';
+import 'package:g_pixel_adventure_tutorial/components/chicken.dart';
 import 'package:g_pixel_adventure_tutorial/components/collision_block.dart';
 import 'package:g_pixel_adventure_tutorial/components/fruit.dart';
 import 'package:g_pixel_adventure_tutorial/components/player.dart';
@@ -44,7 +45,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
         position: Vector2(1, 0),
       );
 
-      add(backgroundTile);     
+      add(backgroundTile);
     }
   }
 
@@ -88,6 +89,24 @@ class Level extends World with HasGameRef<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(checkpoint);
+            break;
+
+          case 'Chicken':
+            final offNeg = spawnPoint.properties.getValue('offNeg');
+            final offPos = spawnPoint.properties.getValue('offPos');
+            final chicken = Chicken(
+              position: Vector2(
+                spawnPoint.x,
+                spawnPoint.y,
+              ),
+              size: Vector2(
+                spawnPoint.width,
+                spawnPoint.height,
+              ),
+              offNeg: offNeg,
+              offPos: offPos,
+            );
+            add(chicken);
             break;
 
           default:
